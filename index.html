@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xenophobia Myth-Buster | Stats SA & DHA Demographic Visualizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500/20 selection:text-cyan-400">
+
+  <!-- Ambient lighting -->
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <div class="absolute -top-32 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px]"></div>
+    <div class="absolute top-1/2 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[150px]"></div>
+    <div class="absolute -bottom-40 right-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px]"></div>
+  </div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <!-- Header -->
+    <header class="border-b border-slate-800 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            Census 2022 & DHA Data Engine
+          </span>
+          <span class="text-xs font-mono text-slate-400 hidden sm:inline">SA Informatics Master Portfolio</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+          <span>🇿🇦 Xenophobia Myth-Buster</span>
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base mt-1 max-w-2xl font-light">
+          Countering viral misinformation with empirical evidence. Visualizes official Statistics South Africa (Census 2022) and Department of Home Affairs data to contrast public perception with demographic reality.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/BongaManzini/xenophobia-myth-buster" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-xs font-mono flex items-center gap-2 transition-all">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub</span>
+        </a>
+        <a href="../" class="px-3 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold font-mono flex items-center gap-1.5 transition-all">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Portfolio</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Interactive Guessing Experiment -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/40 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 mb-8 shadow-2xl">
+      <div class="max-w-3xl">
+        <span class="text-xs font-mono uppercase text-cyan-400 font-semibold tracking-wider block mb-1">
+          Interactive Experiment: Perception vs Reality
+        </span>
+        <h2 class="text-xl sm:text-3xl font-extrabold text-white">
+          "How many immigrants do you think live in South Africa?"
+        </h2>
+        <p class="text-sm text-slate-300 font-light mt-2 leading-relaxed">
+          Viral political rhetoric claims that <em>"20 to 30 million foreigners have overrun the country"</em> and <em>"foreigners hold 50% of jobs."</em> Adjust the slider below to test your perception against the audited Census 2022 enumeration.
+        </p>
+      </div>
+
+      <!-- Slider Input -->
+      <div class="mt-8 bg-slate-950/70 border border-slate-800 rounded-2xl p-6 max-w-3xl">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono text-slate-400 uppercase">Your Estimated Percentage:</span>
+          <div class="flex items-baseline gap-1.5">
+            <span id="guess-pct" class="text-3xl font-black font-mono text-cyan-400">25%</span>
+            <span id="guess-people" class="text-xs font-mono text-slate-400">(~15.5 Million people)</span>
+          </div>
+        </div>
+
+        <input 
+          type="range" 
+          id="guess-slider" 
+          min="1" 
+          max="50" 
+          step="1" 
+          value="25" 
+          class="w-full accent-cyan-400 cursor-pointer"
+          oninput="updateGuess()"
+        >
+
+        <div class="flex justify-between text-[11px] font-mono text-slate-500 mt-2">
+          <span>1% (620k)</span>
+          <span>15% (~9.3M)</span>
+          <span class="text-amber-400">Viral Claim: 30%–50% (18M–31M)</span>
+          <span>50% (31.0M)</span>
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <button onclick="revealData()" id="reveal-btn" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold font-mono text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+            <span>Reveal Census 2022 Official Truth</span>
+          </button>
+          <span class="text-xs text-slate-400 font-light">Based on Stats SA Census 2022 (Released Oct 2023)</span>
+        </div>
+      </div>
+
+      <!-- Reveal Output Box -->
+      <div id="reveal-box" class="mt-8 pt-8 border-t border-slate-800 hidden space-y-6 animate-in fade-in">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5">
+            <span class="text-[11px] font-mono uppercase text-slate-400 block mb-1">Total National Population</span>
+            <span class="text-3xl font-black text-white font-mono">62,027,503</span>
+            <span class="text-xs text-slate-400 block mt-1">100% of enumerated residents</span>
+          </div>
+
+          <div class="bg-slate-950 border border-emerald-500/30 rounded-2xl p-5">
+            <span class="text-[11px] font-mono uppercase text-emerald-400 font-semibold block mb-1">Official Foreign-Born Total</span>
+            <span class="text-3xl font-black text-emerald-400 font-mono">2,422,968</span>
+            <span class="text-xs text-emerald-300 font-mono block mt-1">Just 3.9% of South Africa</span>
+          </div>
+
+          <div class="bg-slate-950 border border-rose-500/30 rounded-2xl p-5">
+            <span class="text-[11px] font-mono uppercase text-rose-400 font-semibold block mb-1">Your Perception Error</span>
+            <span id="diff-error" class="text-3xl font-black text-rose-400 font-mono">+21.1%</span>
+            <span id="diff-text" class="text-xs text-rose-300 font-mono block mt-1">Overestimated by 13.1M</span>
+          </div>
+        </div>
+
+        <!-- Comparative Visualizer Bar -->
+        <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex justify-between text-xs font-mono">
+            <span class="text-slate-300">South African Citizens & Nationals: <strong>96.1%</strong> (59.6 Million)</span>
+            <span class="text-emerald-400">Foreign-Born: <strong>3.9%</strong> (2.4 Million)</span>
+          </div>
+          <div class="w-full bg-slate-900 rounded-full h-7 overflow-hidden flex border border-slate-800 p-0.5">
+            <div class="h-full bg-cyan-600 rounded-l flex items-center pl-3 text-[10px] font-mono text-white font-bold" style="width: 96.1%">
+              South African Born (96.1%)
+            </div>
+            <div class="h-full bg-emerald-400 rounded-r flex items-center justify-center text-[10px] font-mono text-slate-950 font-black" style="width: 3.9%">
+              3.9%
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 font-light leading-relaxed">
+            International global average for immigrant population share is <strong>3.6%</strong> (UN DESA). South Africa's immigrant proportion of <strong>3.9%</strong> is completely in line with global norms, shattering the assertion that the country has been demographically replaced.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Country of Origin & Economic Contributions Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      
+      <!-- Top Countries of Origin -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <i data-lucide="globe-2" class="w-5 h-5 text-cyan-400"></i>
+          <h3 class="text-lg font-bold text-white">Countries of Origin Breakdown</h3>
+        </div>
+        <p class="text-xs text-slate-400 mb-5 font-light">
+          Census 2022 enumerated international migrants across SADC, wider Africa, and overseas nations:
+        </p>
+
+        <div class="space-y-3 font-mono text-xs">
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🇿🇼 Zimbabwe</span>
+              <span class="text-cyan-400 font-bold">1,012,000 (45.5%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-cyan-500 h-full rounded-full" style="width: 45.5%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🇲🇿 Mozambique</span>
+              <span class="text-indigo-400 font-bold">416,000 (18.7%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-indigo-500 h-full rounded-full" style="width: 18.7%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🇱🇸 Lesotho</span>
+              <span class="text-emerald-400 font-bold">227,000 (10.2%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-500 h-full rounded-full" style="width: 10.2%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🇲🇼 Malawi</span>
+              <span class="text-purple-400 font-bold">151,000 (6.8%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-purple-500 h-full rounded-full" style="width: 6.8%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🌍 Other SADC & Rest of Africa</span>
+              <span class="text-amber-400 font-bold">285,000 (12.8%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-500 h-full rounded-full" style="width: 12.8%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-slate-300 mb-1">
+              <span>🇬🇧 / 🇪🇺 Europe, Asia & Americas</span>
+              <span class="text-rose-400 font-bold">132,000 (6.0%)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-rose-500 h-full rounded-full" style="width: 6.0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Economic Evidence & Job Creation Metrics -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i>
+          <h3 class="text-lg font-bold text-white">Empirical Economic Contributions</h3>
+        </div>
+        <p class="text-xs text-slate-400 mb-5 font-light">
+          Audited academic studies from the <strong>World Bank</strong> and <strong>OECD (2018)</strong> measuring the net fiscal impact of immigrant labor on the South African economy:
+        </p>
+
+        <div class="space-y-4">
+          <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 font-bold font-mono text-sm">
+              +2.3
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white">Net Job Creation Multiplier</h4>
+              <p class="text-[11px] text-slate-400 leading-relaxed font-light mt-0.5">
+                OECD research demonstrates that immigrant-operated micro-enterprises employ an average of <strong>2.3 South African citizens</strong> per enterprise, generating localized employment in township economies.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 font-bold font-mono text-sm">
+              +1.9%
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white">GDP Contribution Exceeds Cost</h4>
+              <p class="text-[11px] text-slate-400 leading-relaxed font-light mt-0.5">
+                Immigrants contribute an estimated <strong>1.9% to South African GDP per capita</strong> through consumption, VAT generation on local goods, and rental payments to township landlords.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 font-bold font-mono text-sm">
+              0%
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white">Zero Access to SASSA Social Grants</h4>
+              <p class="text-[11px] text-slate-400 leading-relaxed font-light mt-0.5">
+                Undocumented or temporary foreign nationals are legally barred from receiving SASSA child support, old age, or SRD grants, which are strictly verified against the Home Affairs National Population Register.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Data Shrinks the Enemy Informatics Summary -->
+    <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+          <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white mb-2">Informatics Principle: "Data Shrinks the Myth"</h3>
+          <p class="text-sm text-slate-300 font-light leading-relaxed">
+            Xenophobic political campaigns rely on numerical inflation (e.g. telling struggling citizens that 25 million foreigners are consuming resources). By building open, interactive data tools that visually tether citizens to actual census data (2.4M out of 62M), informatics diffuses tension, replaces panic with facts, and redirects policy attention to systemic institutional problems (youth unemployment, municipal mismanagement, and border governance).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-12 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-mono gap-4">
+      <p>© Bonga Manzini • BSc Informatics (UNISA) • South African Socio-Economic Portfolio</p>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/BongaManzini/xenophobia-myth-buster" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub Repository</a>
+        <span>•</span>
+        <a href="https://bongamanzini.github.io/portfolio/" target="_blank" class="hover:text-cyan-400 transition-colors">Portfolio</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function updateGuess() {
+      const val = parseInt(document.getElementById('guess-slider').value);
+      document.getElementById('guess-pct').textContent = val + '%';
+      
+      const approxPeople = ((val / 100) * 62.027).toFixed(1);
+      document.getElementById('guess-people').textContent = `(~${approxPeople} Million people)`;
+    }
+
+    function revealData() {
+      const val = parseInt(document.getElementById('guess-slider').value);
+      const actualPct = 3.9;
+      const actualPeople = 2.42;
+
+      const userPeople = ((val / 100) * 62.027);
+      const diffPct = (val - actualPct).toFixed(1);
+      const diffPeople = (userPeople - actualPeople).toFixed(1);
+
+      const errEl = document.getElementById('diff-error');
+      const textEl = document.getElementById('diff-text');
+
+      if (val > actualPct) {
+        errEl.textContent = `+${diffPct}%`;
+        errEl.className = 'text-3xl font-black text-rose-400 font-mono';
+        textEl.textContent = `Overestimated by ${diffPeople}M people`;
+        textEl.className = 'text-xs text-rose-300 font-mono block mt-1';
+      } else if (val < actualPct) {
+        errEl.textContent = `${diffPct}%`;
+        errEl.className = 'text-3xl font-black text-amber-400 font-mono';
+        textEl.textContent = `Underestimated by ${Math.abs(diffPeople)}M people`;
+        textEl.className = 'text-xs text-amber-300 font-mono block mt-1';
+      } else {
+        errEl.textContent = `0.0% Exact!`;
+        errEl.className = 'text-3xl font-black text-emerald-400 font-mono';
+        textEl.textContent = `You know your census data perfectly!`;
+        textEl.className = 'text-xs text-emerald-300 font-mono block mt-1';
+      }
+
+      document.getElementById('reveal-box').classList.remove('hidden');
+      document.getElementById('reveal-box').scrollIntoView({ behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateGuess();
+    });
+  </script>
+</body>
+</html>
