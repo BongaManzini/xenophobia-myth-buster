@@ -1,12 +1,12 @@
-# 🇿🇦 Xenophobia Myth-Buster: Real Stats vs Social Media Rumors
+# Xenophobia Myth-Buster: Real Stats vs Social Media Rumors
 ### A Student Research Project on South African Migration & Census 2022 Data
 
-> **Live Website**: [https://bongamanzini.github.io/xenophobia-myth-buster/](https://bongamanzini.github.io/xenophobia-myth-buster/)  
+> **Live Website**: [https://bongamanzini.github.io/xenophobia-myth-buster/](https://bongamanzini.github.io/xenophobia-myth-buster/) 
 > **Built by**: Bonga Manzini (BSc Informatics student at UNISA)
 
 ---
 
-## 🔬 About This Project
+## About This Project
 
 I built this interactive website because I got tired of seeing wild rumors on social media claiming that 20 to 30 million immigrants live in South Africa taking all the jobs and social grants.
 
@@ -59,14 +59,14 @@ As a student studying informatics and data, I wanted to find out what the real o
 
 ---
 
-## 🛠️ Tech Stack
+## ️ Tech Stack
 - **HTML5 & Vanilla JavaScript**
 - **Tailwind CSS** (for clean, responsive styling)
 - **Chart.js** (for interactive comparison charts)
 
 ---
 
-## 🤝 Contributing & Pull Requests
+## Contributing & Pull Requests
 
 Have an idea to make the graphs clearer, add a new official data source, or fix a typo?
 1. Fork this repository
